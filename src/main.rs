@@ -1,6 +1,8 @@
 use actix_web::{web, App, HttpRequest, HttpServer, Responder};
 
 async fn greet(req: HttpRequest) -> impl Responder {
+    let x = 12;
+    println!("{}", x);
     let name = req.match_info().get("name").unwrap_or("World");
     format!("Hey   {}!", &name)
 }
