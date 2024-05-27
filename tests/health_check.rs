@@ -16,7 +16,7 @@ async  fn invalid_subscriptions_returns_400() {
     
     let body_contents = vec![
         ("name=bharathi","mail is missing"),
-        ("name=email=bharathi102000%40gmail.com","name is missing"),
+        ("email=bharathi102000%40gmail.com","name is missing"),
         ("","name is missing"),
     ];
     
@@ -29,7 +29,7 @@ async  fn invalid_subscriptions_returns_400() {
             .send()
             .await
             .expect("unable to send the request");
-        assert_eq!(400, response.status().as_u16(),"The Api did not failed with the 400 status error message {}",error_message)
+        assert_eq!(400, response.status().as_u16(),"The Api did not failed with the 400 status when the {}",error_message)
     }
 }
 
