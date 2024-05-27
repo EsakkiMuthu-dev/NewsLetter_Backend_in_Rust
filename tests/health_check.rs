@@ -14,13 +14,23 @@ fn spawn_app() -> String{
 async  fn invalid_subscriptions_returns_400() {
     let address = spawn_app();
     
-    let body_contents = Vec![
+    let body_contents = vec![
         ("name=bharathi","mail is missing"),
         ("name=email=bharathi102000%40gmail.com","name is missing"),
         ("","name is missing"),
     ];
     
-    
+    for(invalid_body,error_message) in body_contents{
+        let client = Client::new();
+        let response = client
+            .post(format!("{}/subscriptions",&address))
+            .header("content-type","application/x-www-form-urlencoded")
+            .body(invalid_body)
+            .send()
+            .await
+            .expect("unable to send the request");
+        assert_eq!(400, response.status().as_u16(),"The Api did not failed with the 400 status error message {}",error_message)
+    }
 }
 
 #[tokio::test]
