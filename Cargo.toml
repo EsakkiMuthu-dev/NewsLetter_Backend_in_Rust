@@ -11,6 +11,8 @@ clippy = "0.0.302"
 tokio = { version = "1.37.0", features = ["rt", "rt-multi-thread", "macros"] }
 serde = {version = "1.0.203",features = ["derive"]}
 
+#using table like toml syntax 
+
 [dev-dependencies]
 reqwest = "0.12.4"
 
