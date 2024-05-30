@@ -1,5 +1,5 @@
 #[derive(serde::Deserialize)]
-pub struct settings{
+pub struct Settings{
     pub database : DatabaseSettings,
     pub application_port:u16
 }
@@ -17,8 +17,8 @@ pub fn get_configuration() -> Result<Settings , config::ConfigError>{
     let mut settings = config::Config::default();
     //Adding configuration from a file named 'configuration'
     // it will read either json or yaml
-    settings.merge(config::File::with_name("configuration"))?;
-    
+    settings.merge(config::File::with_name("configuration'"))?;
+
     //Try to read confoguration and binds to settings
     settings.try_into()
 }
