@@ -4,6 +4,11 @@ use std::net::TcpListener;
 use actix_web::{App, HttpResponse, HttpServer, web};
 use actix_web::dev::Server;
 
+pub mod configuration;
+pub mod routes;
+pub mod startup;
+
+
 #[derive(serde::Deserialize)]
 pub struct FormData{
     name : String,

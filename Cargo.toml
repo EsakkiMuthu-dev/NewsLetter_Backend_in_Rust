@@ -10,6 +10,7 @@ actix-web = "4.0.0"
 clippy = "0.0.302"
 tokio = { version = "1.37.0", features = ["rt", "rt-multi-thread", "macros"] }
 serde = {version = "1.0.203",features = ["derive"]}
+config = "0.11.0"
 
 #using table like toml syntax
 [dependencies.sqlx]
