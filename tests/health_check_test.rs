@@ -1,6 +1,9 @@
 use std::net::TcpListener;
 
 use reqwest::Client;
+use sqlx::{Connection, PgConnection};
+
+use zero2prodLibrary::configuration::get_configuration;
 
 fn spawn_app() -> String{
      let listener = TcpListener::bind("127.0.0.1:0").expect("Unable to bound to random port ");
@@ -37,6 +40,11 @@ async  fn invalid_subscriptions_returns_400() {
 async fn health_check_works(){
     let address = spawn_app();
     let client = reqwest::Client::new();
+    let configraution = get_configuration().expect("Failed to read configuration");
+    let connection_string = configraution.database.get_connection_string();
+    let connection = PgConnection::connect(&connection_string)
+        .await
+        .expect("Unable to get connection");
     let response = client
                                      .get(format!("{}/healthcheck",&address))
                                      .send()
