@@ -59,6 +59,14 @@ async fn health_check_works(){
 async fn valid_subscriptions_returns_200()
 {
     let app_address =spawn_app();
+ 
+    let configuration = get_configuration().expect(" Unable to get configuration");
+    let connection_string = configuration.database.get_connection_string();
+    
+    let mut connection = PgConnection::connect(&connection_string)
+        .await
+        .expect("Failed to connect to database");
+
     let client = Client::new();
 
     let body ="name=bharathi&email=bharathi102000%40gmail.com";
@@ -71,6 +79,15 @@ async fn valid_subscriptions_returns_200()
         .expect("Failed to execute request");
 
     //assert
-    assert_eq!(200,response.status().as_u16())
+    assert_eq!(200,response.status().as_u16());
+    
+    let saved = sqlx::query!("SELECT name ,email from subscriptions",)
+        .fetch_one(&mut connection)
+        .await
+        .expect("Cant fetch data from connection");
+    
+    assert_eq!(saved.email ,"bharathi102000@gmail.com");
+    assert_eq!(saved.name ,"bharathi");
+    
 }
 
