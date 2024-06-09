@@ -1,5 +1,6 @@
 use std::net::TcpListener;
 
+use once_cell::sync::Lazy;
 use reqwest::Client;
 use sqlx::{Connection, PgConnection, PgPool};
 
@@ -7,14 +8,28 @@ use zero2prodLibrary::configuration::get_configuration;
 use zero2prodLibrary::startup::run;
 use zero2prodLibrary::telemetry::{get_subscriber, init_subscriber};
 
+// use static to  tracing stack is only intialised once using ' once_cell'
+static  TRACING: Lazy<()> = Lazy::new(||{
+    let default_filter = "info".to_string();
+    let subscriber_name = "test".to_string();
+    
+    if std::env::var("TEST_LOG").is_ok(){
+        let subscriber = get_subscriber(subscriber_name,default_filter,std::io::stdout);
+        init_subscriber(subscriber);
+    }else{
+        let subscriber = get_subscriber(subscriber_name,default_filter,std::io::sink);
+        init_subscriber(subscriber);
+    }
+});
+
+
 pub struct TestApp
 {
     pub address:String,
     pub connection_pool:PgPool
 }
 async fn spawn_app() -> TestApp{
-    let subscriber = get_subscriber("test".into() , "debug".into());
-    init_subscriber(subscriber);
+    Lazy::force(&TRACING);
     let listener = TcpListener::bind("127.0.0.1:0").expect("Unable to bound to random port ");
     let port = listener.local_addr().unwrap().port();
     let configuration = get_configuration().expect("Unable to gert configuration ");
@@ -80,7 +95,7 @@ async fn valid_subscriptions_returns_200()
 
     let client = Client::new();
 
-    let body ="name=bharathi&email=bharathi102000%40gmail.com";
+    let body ="name=mughil&email=mughil123%40gmail.com";
     let response = client
         .post(format!("{}/subscriptions",&test_app.address))
         .header("Content-Type","application/x-www-form-urlencoded")
@@ -97,8 +112,8 @@ async fn valid_subscriptions_returns_200()
         .await
         .expect("Cant fetch data from connection");
 
-    assert_eq!(saved.email ,"bharathi102000@gmail.com");
-    assert_eq!(saved.name ,"bharathi");
+    assert_eq!(saved.email ,"mughil123@gmail.com");
+    assert_eq!(saved.name ,"mughil");
 
 }
 

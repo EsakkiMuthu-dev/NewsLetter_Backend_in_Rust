@@ -1,3 +1,4 @@
+use std::io::stdout;
 use std::net::TcpListener;
 
 use sqlx::PgPool;
@@ -8,7 +9,7 @@ use zero2prodLibrary::telemetry::{get_subscriber, init_subscriber};
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    let tracing_subscriber = get_subscriber("zero2prodLibrary".into(),"info".into());
+    let tracing_subscriber = get_subscriber("zero2prodLibrary".into(), "info".into(), stdout);
     init_subscriber(tracing_subscriber);
 
     //panic if we cant read configuration

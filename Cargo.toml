@@ -24,6 +24,7 @@ tracing-log = "0.1.4"
 
 [dev-dependencies]
 reqwest = "0.12.4"
+once_cell = "1.0.1"
 
 [lib]
 path = "src/lib.rs"
