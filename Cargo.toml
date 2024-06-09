@@ -22,7 +22,7 @@ tracing-actix-web = "0.5.0"
 [dependencies.sqlx]
     version = "0.5.7"
     default-features = false
-    features = ["runtime-actix-rustls","macros","postgres","uuid","chrono","migrate"]
+    features = ["runtime-actix-rustls","macros","postgres","uuid","chrono","migrate","offline"]
 
 [dev-dependencies]
 reqwest = "0.12.4"
