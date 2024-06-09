@@ -15,7 +15,6 @@ pub struct FormData{
 name="Adding a new Subscriber",
 skip(form_data,connection_pool),
 fields(
-    request_id = %Uuid::new_v4(),
     subscriber_email=%form_data.email,
     subscriber_name=%form_data.name
 )
@@ -38,11 +37,10 @@ pub async fn subscribe(form_data: web::Form<FormData>, connection_pool : web::Da
         .await
     {
         Ok(_) => {
-            tracing::info!("request_id : {} New subscriber details saved!!",request_id);
             HttpResponse::Ok().finish()
         },
         Err(e)=>{
-            tracing::error!("request_id {} - Failed to execute query : {:?} ",request_id,e);
+            tracing::error!(" Failed to execute query : {:?} ",e);
             HttpResponse::InternalServerError().finish()
         }
     }
