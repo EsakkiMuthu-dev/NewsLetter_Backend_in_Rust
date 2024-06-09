@@ -5,6 +5,7 @@ use sqlx::{Connection, PgConnection, PgPool};
 
 use zero2prodLibrary::configuration::get_configuration;
 use zero2prodLibrary::startup::run;
+use zero2prodLibrary::telemetry::{get_subscriber, init_subscriber};
 
 pub struct TestApp
 {
@@ -12,8 +13,10 @@ pub struct TestApp
     pub connection_pool:PgPool
 }
 async fn spawn_app() -> TestApp{
-     let listener = TcpListener::bind("127.0.0.1:0").expect("Unable to bound to random port ");
-     let port = listener.local_addr().unwrap().port();
+    let subscriber = get_subscriber("test".into() , "debug".into());
+    init_subscriber(subscriber);
+    let listener = TcpListener::bind("127.0.0.1:0").expect("Unable to bound to random port ");
+    let port = listener.local_addr().unwrap().port();
     let configuration = get_configuration().expect("Unable to gert configuration ");
     let connection_pool = PgPool::connect(&configuration.database.get_connection_string())
         .await
