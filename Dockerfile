@@ -9,6 +9,9 @@ RUN apt update && apt install lld clang -y
 
 COPY . .
 
+#Set the sqlx_offline mode ytrue for compiltaion
+ENV SQLX_OFFLINE true
+
 #Lets build our production ready rust
 RUN cargo build --release
 
